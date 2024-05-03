@@ -47,39 +47,6 @@ class CreatureComforts implements IPostDBLoadMod {
             // shrapnel
         ]
 
-        // function interpolateMultiplier(level, baseLevels, targetMultipliers) {
-            // Check for valid input lengths
-        //     if (baseLevels.length !== targetMultipliers.length) {
-        //         throw new Error("Base levels and target multipliers must have the same length");
-        //     }
-
-            // Find the two levels between which the current level falls
-        //     let lowerLevelIndex = baseLevels.findIndex(lvl => lvl >= level);
-        //     let upperLevelIndex = lowerLevelIndex + 1;
-
-            // Handle edge cases (level 1 and levels exceeding the defined range)
-        //     if (level === 1) {
-        //         return targetMultipliers[0];
-        //     } else if (upperLevelIndex === baseLevels.length) {
-        //         return targetMultipliers[targetMultipliers.length - 1];
-        //     }
-
-            // Extract base values and target multipliers for interpolation
-        //     const lowerLevel = baseLevels[lowerLevelIndex];
-        //     const upperLevel = baseLevels[upperLevelIndex];
-        //     const lowerMultiplier = targetMultipliers[lowerLevelIndex];
-        //     const upperMultiplier = targetMultipliers[upperLevelIndex];
-
-            // Calculate the interpolation factor (weight for the upper level)
-        //     const interpolationFactor = (level - lowerLevel) / (upperLevel - lowerLevel);
-
-            // Perform linear interpolation
-        //     const interpolatedMultiplier = lowerMultiplier + (interpolationFactor * (upperMultiplier - lowerMultiplier));
-
-        //     return interpolatedMultiplier;
-        // }
-          
-
         //Buff Fuel Can Resource limits
         for (const i in items) {
             if (items[i]._parent === "5d650c3e815116009f6201d2") {
@@ -112,8 +79,8 @@ class CreatureComforts implements IPostDBLoadMod {
                     this.logger.logWithColor(`Case ${items[itemCase]._props.ShortName} grid size updated.`, LogTextColor.GREEN)
                     
                 } else if (junkboxCaseIds.includes(items[itemCase]._id)) {
-                    items[itemCase]._props.Grids[0]._props.cellsH = 15;
-                    items[itemCase]._props.Grids[0]._props.cellsV = 15;
+                    items[itemCase]._props.Grids[0]._props.cellsH = 16;
+                    items[itemCase]._props.Grids[0]._props.cellsV = 16;
                     this.logger.logWithColor(`Case ${items[itemCase]._props.ShortName} grid size updated.`, LogTextColor.GREEN)
                 }
             }
@@ -129,48 +96,23 @@ class CreatureComforts implements IPostDBLoadMod {
 
 
         // Remove Inertia
-        globals.config.Inertia.BaseJumpPenalty = 0.03
-        globals.config.Inertia.CrouchSpeedAccelerationRange.x = 4.75
-        globals.config.Inertia.CrouchSpeedAccelerationRange.y = 7.5
-        globals.config.Inertia.ExitMovementStateSpeedThreshold.x = 0.001
-        globals.config.Inertia.ExitMovementStateSpeedThreshold.y = 0.001
-        globals.config.Inertia.InertiaLimitsStep = 0.1
-        globals.config.Inertia.MaxTimeWithoutInput.x = 0.01
-        globals.config.Inertia.MaxTimeWithoutInput.y = 0.03
-        globals.config.Inertia.PreSprintAccelerationLimits.x = 8
-        globals.config.Inertia.PreSprintAccelerationLimits.y = 4
-        globals.config.Inertia.SprintAccelerationLimits.x = 15
-        globals.config.Inertia.SprintBrakeInertia.y = 0
-        globals.config.Inertia.SprintTransitionMotionPreservation.x = 0.006
-        globals.config.Inertia.SprintTransitionMotionPreservation.y = 0.008
-        globals.config.Inertia.WalkInertia.x = 0.002
-        globals.config.Inertia.WalkInertia.y = 0.025
-
-        //! adjust XP required per level - BREAKS PMC SPAWNING IN SWAG+DONUTS
-        // globalsXP.forEach((expLvl, index) => {
-        //     const reqEXP = expLvl.exp;
-        //     this.logger.logWithColor(`[${this.modName}]: Lv${index + 1} - Required EXP: ${expLvl.exp}`, LogTextColor.WHITE);
-        //     const level = index + 1; // Level corresponds to index + 1
-
-            // Define base levels and target multipliers
-        //     const baseLevels = [1, 21, 31, 41, 51, 71, 80];
-        //     const targetMultipliers = [1.0, 1.45, 1.41, 1.37, 1.31, 1.27, 1.2];
-
-            // Calculate interpolated multiplier
-        //     const multiplier = interpolateMultiplier(level, baseLevels, targetMultipliers);
-
-            // Ceil the EXP value
-        //     Math.ceil(expLvl.exp);
-        //     Math.ceil(expLvl.exp *= multiplier);
-
-            // Determine sign based on difference
-        //     const difference = Math.ceil(expLvl.exp) - reqEXP;
-        //     const sign = difference > 0 ? "+" : "";
-
-        //     this.logger.logWithColor(`[${this.modName}]: Lv${level} - Required EXP: ${Math.ceil(expLvl.exp *= multiplier)}`, LogTextColor.GRAY);
-        //     this.logger.logWithColor(`[${this.modName}]: Lv${level} - EXP DIFF: ${sign}${difference} XP \n`, LogTextColor.YELLOW);
-        // });
-
+        
+        globalsInertia.BaseJumpPenalty /= 3 // 0.03
+        globalsInertia.CrouchSpeedAccelerationRange.x /= 3 // 4.75
+        globalsInertia.CrouchSpeedAccelerationRange.y /= 3 // 7.5
+        globalsInertia.ExitMovementStateSpeedThreshold.x /= 3 // 0.001
+        globalsInertia.ExitMovementStateSpeedThreshold.y /= 3 // 0.001
+        globalsInertia.InertiaLimitsStep /= 3 // 0.1
+        globalsInertia.MaxTimeWithoutInput.x /= 3 // 0.01
+        globalsInertia.MaxTimeWithoutInput.y /= 3 // 0.03
+        globalsInertia.PreSprintAccelerationLimits.x /= 3 // 8
+        globalsInertia.PreSprintAccelerationLimits.y /= 3 // 4
+        globalsInertia.SprintAccelerationLimits.x /= 3 // 15
+        globalsInertia.SprintBrakeInertia.y /= 3 // 0
+        globalsInertia.SprintTransitionMotionPreservation.x /= 3 // 0.006
+        globalsInertia.SprintTransitionMotionPreservation.y /= 2 // 0.008
+        globalsInertia.WalkInertia.x /= 3 // 0.002
+        globalsInertia.WalkInertia.y /= 3 // 0.025
 
         globalsXP.forEach((expLvl, index) => {
             this.logger.logWithColor(`[${this.modName}]: Lv${index + 1} - Required EXP: ${expLvl.exp}`, LogTextColor.GRAY);
@@ -199,17 +141,17 @@ class CreatureComforts implements IPostDBLoadMod {
         this.logger.logWithColor(`[${this.modName}]: ### DEBUG ### hydrationDamage is now ${globalsHealth.Effects.Existence.HydrationDamage}.\n`, LogTextColor.YELLOW)
 
         // Increase Carry Weight limits
-        globalsStamina.BaseOverweightLimits.x *= 1.375;
+        globalsStamina.BaseOverweightLimits.x *= 1.675;
         globalsStamina.BaseOverweightLimits.y *= 1.375;
 
-        globalsStamina.SprintOverweightLimits.x *= 1.375;
-        globalsStamina.SprintOverweightLimits.y *= 1.375;
+        globalsStamina.SprintOverweightLimits.x *= 1.875;
+        globalsStamina.SprintOverweightLimits.y *= 1.675;
 
-        globalsStamina.WalkOverweightLimits.x *= 1.475;
-        globalsStamina.WalkOverweightLimits.y *= 1.475;
+        globalsStamina.WalkOverweightLimits.x *= 1.625;
+        globalsStamina.WalkOverweightLimits.y *= 1.625;
 
-        globalsStamina.WalkSpeedOverweightLimits.x *= 1.57;
-        globalsStamina.WalkSpeedOverweightLimits.y *= 1.57;
+        globalsStamina.WalkSpeedOverweightLimits.x *= 1.775;
+        globalsStamina.WalkSpeedOverweightLimits.y *= 1.575;
 
         this.logger.logWithColor(`[${this.modName}]: ### DEBUG ### BaseOverweightLimits are now ${globalsStamina.BaseOverweightLimits.x}kg and ${globalsStamina.BaseOverweightLimits.y}kg.`, LogTextColor.CYAN);
         this.logger.logWithColor(`[${this.modName}]: ### DEBUG ### SprintOverweightLimits are now ${globalsStamina.SprintOverweightLimits.x}kg and ${globalsStamina.SprintOverweightLimits.y}kg.`, LogTextColor.YELLOW);
@@ -291,7 +233,7 @@ class CreatureComforts implements IPostDBLoadMod {
         });
 
         // const parentId = '5448bf274bdc2dfc2f8b456a';
-        const excludedIds = ['5c0a794586f77461c458f892', '64f6f4c5911bcdfe8b03b0dc'];
+        const excludedIds = ["5c0a794586f77461c458f892", "64f6f4c5911bcdfe8b03b0dc"];
         for (const item of items) {
             // Check if the item's _parent matches the parentId
             if (item._parent === "5448bf274bdc2dfc2f8b456a") {
