@@ -159,7 +159,7 @@ class CreatureComforts implements IPostDBLoadMod {
         //Area Production Timers
         hideoutProds.forEach(zone => {
             if (zone._id === "5d5c205bd582a50d042a3c0e") {
-                zone.productionTime = Math.floor(Math.random() * (27900 - 18900 + 1)) + 18900; // productionTime randomized between 5.25 and 7.75 hours
+                zone.productionTime = Math.floor(Math.random() * (27900 - 18900 + 1)) + 18900; // Bitcoin productionTime randomized between 5.25 and 7.75 hours
             } else 
                 zone.productionTime = Math.floor(Math.random() * (60 - 15 + 1)) + 15; // productionTime randomized between 15 and 60 seconds
         });
@@ -221,7 +221,7 @@ class CreatureComforts implements IPostDBLoadMod {
                 this.logger.logWithColor(`[${this.modName}]: :::AMMUNITION::: ${ammoName} now has a DurabilityBurnModificator value of ${ammo._props.DurabilityBurnModificator}.`, LogTextColor.CYAN)
             }
         });
-        
+
         const excludedIds = ["5c0a794586f77461c458f892", "64f6f4c5911bcdfe8b03b0dc"];
         for (const item of items) {
             if (item._parent === "5448bf274bdc2dfc2f8b456a") { // Check if the item's _parent matches the parentId
