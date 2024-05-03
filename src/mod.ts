@@ -134,18 +134,18 @@ class CreatureComforts implements IPostDBLoadMod {
 
         globalsStamina.SprintOverweightLimits.x *= 2.175;
         globalsStamina.SprintOverweightLimits.y *= 1.375;
-
-        globalsStamina.WalkOverweightLimits.x *= 1.475;
-        globalsStamina.WalkOverweightLimits.y *= 1.475;
-
-        globalsStamina.WalkSpeedOverweightLimits.x *= 1.57;
+        
+        globalsStamina.WalkSpeedOverweightLimits.x *= 1.77;
         globalsStamina.WalkSpeedOverweightLimits.y *= 1.57;
+
+        globalsStamina.WalkOverweightLimits.x *= 1.775;
+        globalsStamina.WalkOverweightLimits.y *= 1.475;
 
         if (this.debug) {
             this.logger.logWithColor(`[${this.modName}]: ### DEBUG ### BaseOverweightLimits are now ${globalsStamina.BaseOverweightLimits.x}kg and ${globalsStamina.BaseOverweightLimits.y}kg.`, LogTextColor.CYAN);
             this.logger.logWithColor(`[${this.modName}]: ### DEBUG ### SprintOverweightLimits are now ${globalsStamina.SprintOverweightLimits.x}kg and ${globalsStamina.SprintOverweightLimits.y}kg.`, LogTextColor.YELLOW);
-            this.logger.logWithColor(`[${this.modName}]: ### DEBUG ### WalkSpeedOverweightLimits are now ${globalsStamina.WalkSpeedOverweightLimits.x}kg and ${globalsStamina.WalkSpeedOverweightLimits.y}kg.\n`, LogTextColor.YELLOW);
-            this.logger.logWithColor(`[${this.modName}]: ### DEBUG ### WalkOverweightLimits are now ${globalsStamina.WalkOverweightLimits.x}kg and ${globalsStamina.WalkOverweightLimits.y}kg.`, LogTextColor.CYAN);
+            this.logger.logWithColor(`[${this.modName}]: ### DEBUG ### WalkSpeedOverweightLimits are now ${globalsStamina.WalkSpeedOverweightLimits.x}kg and ${globalsStamina.WalkSpeedOverweightLimits.y}kg.`, LogTextColor.CYAN);
+            this.logger.logWithColor(`[${this.modName}]: ### DEBUG ### WalkOverweightLimits are now ${globalsStamina.WalkOverweightLimits.x}kg and ${globalsStamina.WalkOverweightLimits.y}kg.\n`, LogTextColor.YELLOW);
         }
 
         //Hideout Production and Area Build Timers - WIP
