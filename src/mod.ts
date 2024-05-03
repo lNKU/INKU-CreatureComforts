@@ -17,7 +17,7 @@ class CreatureComforts implements IPostDBLoadMod {
     readonly modName = "CreatureComforts";
     
     private logger: ILogger;
-    private debug: boolean = false;
+    private debug: boolean = true;
 
     public postDBLoad(container: DependencyContainer): void {
         this.logger = container.resolve<ILogger>("WinstonLogger");
@@ -81,8 +81,8 @@ class CreatureComforts implements IPostDBLoadMod {
 
         // Inertia adjustments
         globals.config.Inertia.BaseJumpPenalty /= 5; // 0.03
-        globals.config.Inertia.CrouchSpeedAccelerationRange.x *= 1.05; // 4.75
-        globals.config.Inertia.CrouchSpeedAccelerationRange.y *= 1.25; // 7.5
+        globals.config.Inertia.CrouchSpeedAccelerationRange.x *= 1.25; // 4.75
+        globals.config.Inertia.CrouchSpeedAccelerationRange.y *= 1.45; // 7.5
         globals.config.Inertia.ExitMovementStateSpeedThreshold.x /= 5; // 0.001
         globals.config.Inertia.ExitMovementStateSpeedThreshold.y /= 5; // 0.001
         globals.config.Inertia.InertiaLimitsStep /= 5; // 0.1
@@ -90,7 +90,7 @@ class CreatureComforts implements IPostDBLoadMod {
         globals.config.Inertia.MaxTimeWithoutInput.y /= 5; // 0.03
         globals.config.Inertia.PreSprintAccelerationLimits.x *= 2; // 8
         globals.config.Inertia.PreSprintAccelerationLimits.y *= 2; // 4
-        globals.config.Inertia.SprintAccelerationLimits.x /= 5; // 15
+        globals.config.Inertia.SprintAccelerationLimits.x *= 2.2; // 15
         globals.config.Inertia.SprintBrakeInertia.y /= 5; // 0
         globals.config.Inertia.SprintTransitionMotionPreservation.x /= 5; // 0.006
         globals.config.Inertia.SprintTransitionMotionPreservation.y /= 5; // 0.008
@@ -129,10 +129,10 @@ class CreatureComforts implements IPostDBLoadMod {
         }
 
         // Increase Carry Weight limits
-        globalsStamina.BaseOverweightLimits.x *= 1.375;
+        globalsStamina.BaseOverweightLimits.x *= 1.92;
         globalsStamina.BaseOverweightLimits.y *= 1.375;
 
-        globalsStamina.SprintOverweightLimits.x *= 1.375;
+        globalsStamina.SprintOverweightLimits.x *= 2.175;
         globalsStamina.SprintOverweightLimits.y *= 1.375;
 
         globalsStamina.WalkOverweightLimits.x *= 1.475;
@@ -144,8 +144,8 @@ class CreatureComforts implements IPostDBLoadMod {
         if (this.debug) {
             this.logger.logWithColor(`[${this.modName}]: ### DEBUG ### BaseOverweightLimits are now ${globalsStamina.BaseOverweightLimits.x}kg and ${globalsStamina.BaseOverweightLimits.y}kg.`, LogTextColor.CYAN);
             this.logger.logWithColor(`[${this.modName}]: ### DEBUG ### SprintOverweightLimits are now ${globalsStamina.SprintOverweightLimits.x}kg and ${globalsStamina.SprintOverweightLimits.y}kg.`, LogTextColor.YELLOW);
-            this.logger.logWithColor(`[${this.modName}]: ### DEBUG ### WalkOverweightLimits are now ${globalsStamina.WalkOverweightLimits.x}kg and ${globalsStamina.WalkOverweightLimits.y}kg.`, LogTextColor.CYAN);
             this.logger.logWithColor(`[${this.modName}]: ### DEBUG ### WalkSpeedOverweightLimits are now ${globalsStamina.WalkSpeedOverweightLimits.x}kg and ${globalsStamina.WalkSpeedOverweightLimits.y}kg.\n`, LogTextColor.YELLOW);
+            this.logger.logWithColor(`[${this.modName}]: ### DEBUG ### WalkOverweightLimits are now ${globalsStamina.WalkOverweightLimits.x}kg and ${globalsStamina.WalkOverweightLimits.y}kg.`, LogTextColor.CYAN);
         }
 
         //Hideout Production and Area Build Timers - WIP
