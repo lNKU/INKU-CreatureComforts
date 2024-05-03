@@ -195,42 +195,38 @@ class CreatureComforts implements IPostDBLoadMod {
         // Loop over the MONEY array and update the StackMaxSize values
         currencies.sort((a, b) => a._props.ShortName.localeCompare(b._props.ShortName)); // DEBUG STATEMENT - Sort by name alphabetically
         currencies.forEach((currency) => {
-            if (
-                currency?._props.StackMaxSize
-            ) {
+            const moneyName = currency._props.ShortName
+            
+            if (currency?._props.StackMaxSize) {
                 currency._props.StackMaxSize *= 2
             }
-            const moneyName = currency._props.ShortName
-            // this.logger.success(`[${this.modName}]: $$$ CURRENCY $$$ ${moneyName} stack size set to ${currency._props.StackMaxSize}.`)
+
+            if (this.debug) {
+                this.logger.success(`[${this.modName}]: $$$ CURRENCY $$$ ${moneyName} stack size set to ${currency._props.StackMaxSize}.`)
+            }
         });
 
         // Loop over the AMMO array and update the StackMaxSize and DurabilityBurnModificator values
         ammunition.sort((a, b) => a._name.localeCompare(b._name)); // DEBUG STATEMENT - Sort by name alphabetically
         ammunition.forEach((ammo) => {
-            if (
-                ammo?._parent === "5485a8684bdc2da71d8b4567" && 
-                ammo?._props.ShortName !== "Shrapnel" && 
-                !(ammo?._props.Caliber === "Caliber127x108" || ammo?._props.Caliber === "Caliber40x46")
-            ) {    
-                const ammoName = ammo._name.replace(/^patron_|_/g, match => match === "patron_" ? "" : " ");
+            const ammoName = ammo._name.replace(/^patron_|_/g, match => match === "patron_" ? "" : " ");
+            if (ammo?._parent === "5485a8684bdc2da71d8b4567" && ammo?._props.ShortName !== "Shrapnel" && !(ammo?._props.Caliber === "Caliber127x108" || ammo?._props.Caliber === "Caliber40x46")) {    
                 ammo._props.StackMaxSize *= 5 // Set desired stack size
                 ammo._props.DurabilityBurnModificator = 1; // Remove durability damage
-    
-                // this.logger.logWithColor(`[${this.modName}]: :::AMMUNITION::: ${ammoName} now has a StackMaxSize of ${ammo._props.StackMaxSize}.`, LogTextColor.CYAN)
-                // this.logger.logWithColor(`[${this.modName}]: :::AMMUNITION::: ${ammoName} now has a StackMaxSize of ${ammo._props.StackMaxSize} and a durability burn value of ${ammo._props.DurabilityBurnModificator}.`, LogTextColor.CYAN)
-                // this.logger.logWithColor(`[${this.modName}]: :::AMMUNITION::: ${ammoName} matches filter.`, LogTextColor.MAGENTA); // DEBUG STATEMENT - Log the matching ammo object(s)
+            }
+
+            if (this.debug) {
+                this.logger.logWithColor(`[${this.modName}]: :::AMMUNITION::: ${ammoName} matches filter.`, LogTextColor.MAGENTA); // DEBUG STATEMENT - Log the matching ammo object(s)
+                this.logger.logWithColor(`[${this.modName}]: :::AMMUNITION::: ${ammoName} now has a StackMaxSize of ${ammo._props.StackMaxSize}.`, LogTextColor.CYAN)
+                this.logger.logWithColor(`[${this.modName}]: :::AMMUNITION::: ${ammoName} now has a DurabilityBurnModificator value of ${ammo._props.DurabilityBurnModificator}.`, LogTextColor.CYAN)
             }
         });
-
-        // const parentId = '5448bf274bdc2dfc2f8b456a';
-        const excludedIds = ['5c0a794586f77461c458f892', '64f6f4c5911bcdfe8b03b0dc'];
+        
+        const excludedIds = ["5c0a794586f77461c458f892", "64f6f4c5911bcdfe8b03b0dc"];
         for (const item of items) {
-            // Check if the item's _parent matches the parentId
-            if (item._parent === "5448bf274bdc2dfc2f8b456a") {
-                // Check if the item's _id is not in the excluded list
-                if (!excludedIds.includes(item._id)) {
-                    // Set the filter to an empty array
-                    item._props.Grids[0]._props.filters = [];
+            if (item._parent === "5448bf274bdc2dfc2f8b456a") { // Check if the item's _parent matches the parentId
+                if (!excludedIds.includes(item._id)) { // Check if the item's _id is not in the excluded list
+                    item._props.Grids[0]._props.filters = []; // Set the filter to an empty array
 
                     if (this.debug) {
                         this.logger.logWithColor(`[${this.modName}]: Item filters removed for secure container: ${item._name}.`, LogTextColor.YELLOW);
