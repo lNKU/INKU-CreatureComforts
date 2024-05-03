@@ -14,8 +14,10 @@ import { IQuestCondition } from "@spt-aki/models/eft/common/tables/IQuest";
 import { IQuest } from "@spt-aki/models/eft/common/tables/IQuest";
 
 class CreatureComforts implements IPostDBLoadMod {
-    private logger: ILogger;
     readonly modName = "CreatureComforts";
+    
+    private logger: ILogger;
+    private debug: boolean = false;
 
     public postDBLoad(container: DependencyContainer): void {
         this.logger = container.resolve<ILogger>("WinstonLogger");
@@ -77,16 +79,7 @@ class CreatureComforts implements IPostDBLoadMod {
             }
         }
 
-        // Buff Container Sizes
-        //* Medicine Case - parent: 5795f317245977243854e041 7x7
-        //? Scav Junkbox - parent: 5795f317245977243854e041 14x14
-        //* Magazine Case - parent: 5795f317245977243854e041 7x7
-        //? Ammunition Case - parent: 5795f317245977243854e041 7x7
-        //* Grenade Case - parent: 5795f317245977243854e041 8x8
-        //? Weapon Case - parent: 5795f317245977243854e041 5x10
-
-
-        // Remove Inertia
+        // Inertia adjustments
         globals.config.Inertia.BaseJumpPenalty /= 4; // 0.03
         globals.config.Inertia.CrouchSpeedAccelerationRange.x /= 4; // 4.75
         globals.config.Inertia.CrouchSpeedAccelerationRange.y /= 4; // 7.5
@@ -105,10 +98,11 @@ class CreatureComforts implements IPostDBLoadMod {
         globals.config.Inertia.WalkInertia.y /= 4; // 0.025
 
         globalsXP.forEach((expLvl, index) => {
-            this.logger.logWithColor(`[${this.modName}]: Lv${index + 1} - Required EXP: ${expLvl.exp}`, LogTextColor.GRAY);
+            const reqExp = expLvl.exp;
+
             if (index + 1 <= 10) {
                 expLvl.exp *= 1.45;
-
+                
             } else if (index + 1 > 10 && index + 1 <= 70) {
                 expLvl.exp *= 1.55;
             } else if (index + 1 === 71) {
@@ -116,19 +110,23 @@ class CreatureComforts implements IPostDBLoadMod {
             } else if (index + 1 > 71) {
                 expLvl.exp *= 1.25;
             }
-
+            
             // Round the EXP value
             expLvl.exp = Math.ceil(expLvl.exp);
-
-            this.logger.logWithColor(`[${this.modName}]: Lv${index + 1} - Updated EXP: ${expLvl.exp}\n`, LogTextColor.WHITE);
-
+            
+            if (this.debug) {
+                this.logger.logWithColor(`[${this.modName}]: Lv${index + 1} - Required EXP: ${reqExp}`, LogTextColor.GRAY);
+                this.logger.logWithColor(`[${this.modName}]: Lv${index + 1} - Updated EXP: ${expLvl.exp}\n`, LogTextColor.WHITE);
+            }
         });
         
         // Halve Energy and Hydration Damage
         globalsHealth.Effects.Existence.EnergyDamage /= 2;
         globalsHealth.Effects.Existence.HydrationDamage /= 2;
-        this.logger.logWithColor(`[${this.modName}]: ### DEBUG ### energyDamage is now ${globalsHealth.Effects.Existence.EnergyDamage}.`, LogTextColor.YELLOW);
-        this.logger.logWithColor(`[${this.modName}]: ### DEBUG ### hydrationDamage is now ${globalsHealth.Effects.Existence.HydrationDamage}.\n`, LogTextColor.YELLOW)
+        if (this.debug) {
+            this.logger.logWithColor(`[${this.modName}]: ### DEBUG ### energyDamage is now ${globalsHealth.Effects.Existence.EnergyDamage}.`, LogTextColor.YELLOW);
+            this.logger.logWithColor(`[${this.modName}]: ### DEBUG ### hydrationDamage is now ${globalsHealth.Effects.Existence.HydrationDamage}.\n`, LogTextColor.YELLOW)
+        }
 
         // Increase Carry Weight limits
         globalsStamina.BaseOverweightLimits.x *= 1.375;
@@ -143,10 +141,12 @@ class CreatureComforts implements IPostDBLoadMod {
         globalsStamina.WalkSpeedOverweightLimits.x *= 1.57;
         globalsStamina.WalkSpeedOverweightLimits.y *= 1.57;
 
-        this.logger.logWithColor(`[${this.modName}]: ### DEBUG ### BaseOverweightLimits are now ${globalsStamina.BaseOverweightLimits.x}kg and ${globalsStamina.BaseOverweightLimits.y}kg.`, LogTextColor.CYAN);
-        this.logger.logWithColor(`[${this.modName}]: ### DEBUG ### SprintOverweightLimits are now ${globalsStamina.SprintOverweightLimits.x}kg and ${globalsStamina.SprintOverweightLimits.y}kg.`, LogTextColor.YELLOW);
-        this.logger.logWithColor(`[${this.modName}]: ### DEBUG ### WalkOverweightLimits are now ${globalsStamina.WalkOverweightLimits.x}kg and ${globalsStamina.WalkOverweightLimits.y}kg.`, LogTextColor.CYAN);
-        this.logger.logWithColor(`[${this.modName}]: ### DEBUG ### WalkSpeedOverweightLimits are now ${globalsStamina.WalkSpeedOverweightLimits.x}kg and ${globalsStamina.WalkSpeedOverweightLimits.y}kg.\n`, LogTextColor.YELLOW);
+        if (this.debug) {
+            this.logger.logWithColor(`[${this.modName}]: ### DEBUG ### BaseOverweightLimits are now ${globalsStamina.BaseOverweightLimits.x}kg and ${globalsStamina.BaseOverweightLimits.y}kg.`, LogTextColor.CYAN);
+            this.logger.logWithColor(`[${this.modName}]: ### DEBUG ### SprintOverweightLimits are now ${globalsStamina.SprintOverweightLimits.x}kg and ${globalsStamina.SprintOverweightLimits.y}kg.`, LogTextColor.YELLOW);
+            this.logger.logWithColor(`[${this.modName}]: ### DEBUG ### WalkOverweightLimits are now ${globalsStamina.WalkOverweightLimits.x}kg and ${globalsStamina.WalkOverweightLimits.y}kg.`, LogTextColor.CYAN);
+            this.logger.logWithColor(`[${this.modName}]: ### DEBUG ### WalkSpeedOverweightLimits are now ${globalsStamina.WalkSpeedOverweightLimits.x}kg and ${globalsStamina.WalkSpeedOverweightLimits.y}kg.\n`, LogTextColor.YELLOW);
+        }
 
         //Hideout Production and Area Build Timers - WIP
         //Area Instant Build Timers
@@ -231,8 +231,10 @@ class CreatureComforts implements IPostDBLoadMod {
                 if (!excludedIds.includes(item._id)) {
                     // Set the filter to an empty array
                     item._props.Grids[0]._props.filters = [];
-                    this.logger.logWithColor(`[${this.modName}]: Filter set to empty for item: ${item._name}.`, LogTextColor.YELLOW); // Optional: Log success
-                    this.logger.logWithColor("- - - -\n", LogTextColor.YELLOW);
+
+                    if (this.debug) {
+                        this.logger.logWithColor(`[${this.modName}]: Item filters removed for secure container: ${item._name}.`, LogTextColor.YELLOW);
+                    }
                 }
             }
         }
