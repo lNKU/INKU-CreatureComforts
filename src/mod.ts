@@ -38,15 +38,6 @@ class CreatureComforts implements IPostDBLoadMod {
         const hideoutZones = database.hideout.areas;
         const hideoutScavs = database.hideout.scavcase;
 
-        // Blacklist shrapnel, grenades, and other unobtainable ammo types
-        const ammunitionBlacklist = [
-            // 40x46
-            // 40 VOG-25
-            // 127x108
-            // 26x75
-            // shrapnel
-        ]
-
         //Buff Fuel Can Resource limits
         for (const i in items) {
             if (items[i]._parent === "5d650c3e815116009f6201d2") {
@@ -79,8 +70,8 @@ class CreatureComforts implements IPostDBLoadMod {
                     this.logger.logWithColor(`Case ${items[itemCase]._props.ShortName} grid size updated.`, LogTextColor.GREEN)
                     
                 } else if (junkboxCaseIds.includes(items[itemCase]._id)) {
-                    items[itemCase]._props.Grids[0]._props.cellsH = 16;
-                    items[itemCase]._props.Grids[0]._props.cellsV = 16;
+                    items[itemCase]._props.Grids[0]._props.cellsH = 15;
+                    items[itemCase]._props.Grids[0]._props.cellsV = 15;
                     this.logger.logWithColor(`Case ${items[itemCase]._props.ShortName} grid size updated.`, LogTextColor.GREEN)
                 }
             }
@@ -96,23 +87,22 @@ class CreatureComforts implements IPostDBLoadMod {
 
 
         // Remove Inertia
-        
-        globalsInertia.BaseJumpPenalty /= 3 // 0.03
-        globalsInertia.CrouchSpeedAccelerationRange.x /= 3 // 4.75
-        globalsInertia.CrouchSpeedAccelerationRange.y /= 3 // 7.5
-        globalsInertia.ExitMovementStateSpeedThreshold.x /= 3 // 0.001
-        globalsInertia.ExitMovementStateSpeedThreshold.y /= 3 // 0.001
-        globalsInertia.InertiaLimitsStep /= 3 // 0.1
-        globalsInertia.MaxTimeWithoutInput.x /= 3 // 0.01
-        globalsInertia.MaxTimeWithoutInput.y /= 3 // 0.03
-        globalsInertia.PreSprintAccelerationLimits.x /= 3 // 8
-        globalsInertia.PreSprintAccelerationLimits.y /= 3 // 4
-        globalsInertia.SprintAccelerationLimits.x /= 3 // 15
-        globalsInertia.SprintBrakeInertia.y /= 3 // 0
-        globalsInertia.SprintTransitionMotionPreservation.x /= 3 // 0.006
-        globalsInertia.SprintTransitionMotionPreservation.y /= 2 // 0.008
-        globalsInertia.WalkInertia.x /= 3 // 0.002
-        globalsInertia.WalkInertia.y /= 3 // 0.025
+        globals.config.Inertia.BaseJumpPenalty /= 4; // 0.03
+        globals.config.Inertia.CrouchSpeedAccelerationRange.x /= 4; // 4.75
+        globals.config.Inertia.CrouchSpeedAccelerationRange.y /= 4; // 7.5
+        globals.config.Inertia.ExitMovementStateSpeedThreshold.x /= 4; // 0.001
+        globals.config.Inertia.ExitMovementStateSpeedThreshold.y /= 4; // 0.001
+        globals.config.Inertia.InertiaLimitsStep /= 4; // 0.1
+        globals.config.Inertia.MaxTimeWithoutInput.x /= 4; // 0.01
+        globals.config.Inertia.MaxTimeWithoutInput.y /= 4; // 0.03
+        globals.config.Inertia.PreSprintAccelerationLimits.x /= 4; // 8
+        globals.config.Inertia.PreSprintAccelerationLimits.y /= 4; // 4
+        globals.config.Inertia.SprintAccelerationLimits.x /= 4; // 15
+        globals.config.Inertia.SprintBrakeInertia.y /= 4; // 0
+        globals.config.Inertia.SprintTransitionMotionPreservation.x /= 4; // 0.006
+        globals.config.Inertia.SprintTransitionMotionPreservation.y /= 4; // 0.008
+        globals.config.Inertia.WalkInertia.x /= 4; // 0.002
+        globals.config.Inertia.WalkInertia.y /= 4; // 0.025
 
         globalsXP.forEach((expLvl, index) => {
             this.logger.logWithColor(`[${this.modName}]: Lv${index + 1} - Required EXP: ${expLvl.exp}`, LogTextColor.GRAY);
@@ -141,17 +131,17 @@ class CreatureComforts implements IPostDBLoadMod {
         this.logger.logWithColor(`[${this.modName}]: ### DEBUG ### hydrationDamage is now ${globalsHealth.Effects.Existence.HydrationDamage}.\n`, LogTextColor.YELLOW)
 
         // Increase Carry Weight limits
-        globalsStamina.BaseOverweightLimits.x *= 1.675;
+        globalsStamina.BaseOverweightLimits.x *= 1.375;
         globalsStamina.BaseOverweightLimits.y *= 1.375;
 
-        globalsStamina.SprintOverweightLimits.x *= 1.875;
-        globalsStamina.SprintOverweightLimits.y *= 1.675;
+        globalsStamina.SprintOverweightLimits.x *= 1.375;
+        globalsStamina.SprintOverweightLimits.y *= 1.375;
 
-        globalsStamina.WalkOverweightLimits.x *= 1.625;
-        globalsStamina.WalkOverweightLimits.y *= 1.625;
+        globalsStamina.WalkOverweightLimits.x *= 1.475;
+        globalsStamina.WalkOverweightLimits.y *= 1.475;
 
-        globalsStamina.WalkSpeedOverweightLimits.x *= 1.775;
-        globalsStamina.WalkSpeedOverweightLimits.y *= 1.575;
+        globalsStamina.WalkSpeedOverweightLimits.x *= 1.57;
+        globalsStamina.WalkSpeedOverweightLimits.y *= 1.57;
 
         this.logger.logWithColor(`[${this.modName}]: ### DEBUG ### BaseOverweightLimits are now ${globalsStamina.BaseOverweightLimits.x}kg and ${globalsStamina.BaseOverweightLimits.y}kg.`, LogTextColor.CYAN);
         this.logger.logWithColor(`[${this.modName}]: ### DEBUG ### SprintOverweightLimits are now ${globalsStamina.SprintOverweightLimits.x}kg and ${globalsStamina.SprintOverweightLimits.y}kg.`, LogTextColor.YELLOW);
@@ -233,7 +223,7 @@ class CreatureComforts implements IPostDBLoadMod {
         });
 
         // const parentId = '5448bf274bdc2dfc2f8b456a';
-        const excludedIds = ["5c0a794586f77461c458f892", "64f6f4c5911bcdfe8b03b0dc"];
+        const excludedIds = ['5c0a794586f77461c458f892', '64f6f4c5911bcdfe8b03b0dc'];
         for (const item of items) {
             // Check if the item's _parent matches the parentId
             if (item._parent === "5448bf274bdc2dfc2f8b456a") {
