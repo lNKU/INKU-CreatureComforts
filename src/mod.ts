@@ -72,30 +72,30 @@ class CreatureComforts implements IPostDBLoadMod {
                     this.logger.logWithColor(`Case ${items[itemCase]._props.ShortName} grid size updated.`, LogTextColor.GREEN)
                     
                 } else if (junkboxCaseIds.includes(items[itemCase]._id)) {
-                    items[itemCase]._props.Grids[0]._props.cellsH = 15;
-                    items[itemCase]._props.Grids[0]._props.cellsV = 15;
+                    items[itemCase]._props.Grids[0]._props.cellsH = 16;
+                    items[itemCase]._props.Grids[0]._props.cellsV = 16;
                     this.logger.logWithColor(`Case ${items[itemCase]._props.ShortName} grid size updated.`, LogTextColor.GREEN)
                 }
             }
         }
 
         // Inertia adjustments
-        globals.config.Inertia.BaseJumpPenalty /= 4; // 0.03
-        globals.config.Inertia.CrouchSpeedAccelerationRange.x /= 4; // 4.75
-        globals.config.Inertia.CrouchSpeedAccelerationRange.y /= 4; // 7.5
-        globals.config.Inertia.ExitMovementStateSpeedThreshold.x /= 4; // 0.001
-        globals.config.Inertia.ExitMovementStateSpeedThreshold.y /= 4; // 0.001
-        globals.config.Inertia.InertiaLimitsStep /= 4; // 0.1
-        globals.config.Inertia.MaxTimeWithoutInput.x /= 4; // 0.01
-        globals.config.Inertia.MaxTimeWithoutInput.y /= 4; // 0.03
-        globals.config.Inertia.PreSprintAccelerationLimits.x /= 4; // 8
-        globals.config.Inertia.PreSprintAccelerationLimits.y /= 4; // 4
-        globals.config.Inertia.SprintAccelerationLimits.x /= 4; // 15
-        globals.config.Inertia.SprintBrakeInertia.y /= 4; // 0
-        globals.config.Inertia.SprintTransitionMotionPreservation.x /= 4; // 0.006
-        globals.config.Inertia.SprintTransitionMotionPreservation.y /= 4; // 0.008
-        globals.config.Inertia.WalkInertia.x /= 4; // 0.002
-        globals.config.Inertia.WalkInertia.y /= 4; // 0.025
+        globals.config.Inertia.BaseJumpPenalty /= 5; // 0.03
+        globals.config.Inertia.CrouchSpeedAccelerationRange.x *= 1.05; // 4.75
+        globals.config.Inertia.CrouchSpeedAccelerationRange.y *= 1.25; // 7.5
+        globals.config.Inertia.ExitMovementStateSpeedThreshold.x /= 5; // 0.001
+        globals.config.Inertia.ExitMovementStateSpeedThreshold.y /= 5; // 0.001
+        globals.config.Inertia.InertiaLimitsStep /= 5; // 0.1
+        globals.config.Inertia.MaxTimeWithoutInput.x /= 5; // 0.01
+        globals.config.Inertia.MaxTimeWithoutInput.y /= 5; // 0.03
+        globals.config.Inertia.PreSprintAccelerationLimits.x *= 2; // 8
+        globals.config.Inertia.PreSprintAccelerationLimits.y *= 2; // 4
+        globals.config.Inertia.SprintAccelerationLimits.x /= 5; // 15
+        globals.config.Inertia.SprintBrakeInertia.y /= 5; // 0
+        globals.config.Inertia.SprintTransitionMotionPreservation.x /= 5; // 0.006
+        globals.config.Inertia.SprintTransitionMotionPreservation.y /= 5; // 0.008
+        globals.config.Inertia.WalkInertia.x /= 5; // 0.002
+        globals.config.Inertia.WalkInertia.y /= 5; // 0.025
 
         globalsXP.forEach((expLvl, index) => {
             const reqExp = expLvl.exp;
