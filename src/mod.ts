@@ -17,7 +17,7 @@ class CreatureComforts implements IPostDBLoadMod {
     readonly modName = "CreatureComforts";
     
     private logger: ILogger;
-    private debug: boolean = true;
+    private config = require("../config/config.json");
 
     public postDBLoad(container: DependencyContainer): void {
         this.logger = container.resolve<ILogger>("WinstonLogger");
@@ -34,6 +34,7 @@ class CreatureComforts implements IPostDBLoadMod {
         const quests = database.templates.quests;
         const items = Object.values(database.templates.items);
         const ammunition = items.filter(x => x._type === "Item" && itemHelper.isOfBaseclass(x._id, BaseClasses.AMMO))
+        const suppressors = items.filter(x => x._type === "Item" && itemHelper.isOfBaseclass(x._id, BaseClasses.SILENCER))
         const currencies = items.filter(x => x._type === "Item" && itemHelper.isOfBaseclass(x._id, BaseClasses.MONEY));
 
         const hideoutProds = database.hideout.production;
@@ -79,23 +80,31 @@ class CreatureComforts implements IPostDBLoadMod {
             }
         }
 
-        // Inertia adjustments
-        globals.config.Inertia.BaseJumpPenalty /= 5; // 0.03
-        globals.config.Inertia.CrouchSpeedAccelerationRange.x *= 1.25; // 4.75
-        globals.config.Inertia.CrouchSpeedAccelerationRange.y *= 1.45; // 7.5
-        globals.config.Inertia.ExitMovementStateSpeedThreshold.x /= 5; // 0.001
-        globals.config.Inertia.ExitMovementStateSpeedThreshold.y /= 5; // 0.001
-        globals.config.Inertia.InertiaLimitsStep /= 5; // 0.1
-        globals.config.Inertia.MaxTimeWithoutInput.x /= 5; // 0.01
-        globals.config.Inertia.MaxTimeWithoutInput.y /= 5; // 0.03
-        globals.config.Inertia.PreSprintAccelerationLimits.x *= 2; // 8
-        globals.config.Inertia.PreSprintAccelerationLimits.y *= 2; // 4
-        globals.config.Inertia.SprintAccelerationLimits.x *= 2.2; // 15
-        globals.config.Inertia.SprintBrakeInertia.y /= 5; // 0
-        globals.config.Inertia.SprintTransitionMotionPreservation.x /= 5; // 0.006
-        globals.config.Inertia.SprintTransitionMotionPreservation.y /= 5; // 0.008
-        globals.config.Inertia.WalkInertia.x /= 5; // 0.002
-        globals.config.Inertia.WalkInertia.y /= 5; // 0.025
+        // // Inertia adjustments
+        // globals.config.Inertia.BaseJumpPenalty /= 5; // 0.03
+        // globals.config.Inertia.CrouchSpeedAccelerationRange.x *= 1.25; // 4.75
+        // globals.config.Inertia.CrouchSpeedAccelerationRange.y *= 1.45; // 7.5
+        // globals.config.Inertia.ExitMovementStateSpeedThreshold.x /= 5; // 0.001
+        // globals.config.Inertia.ExitMovementStateSpeedThreshold.y /= 5; // 0.001
+        // globals.config.Inertia.InertiaLimitsStep /= 5; // 0.1
+        // globals.config.Inertia.MaxTimeWithoutInput.x /= 5; // 0.01
+        // globals.config.Inertia.MaxTimeWithoutInput.y /= 5; // 0.03
+        // globals.config.Inertia.PreSprintAccelerationLimits.x *= 2; // 8
+        // globals.config.Inertia.PreSprintAccelerationLimits.y *= 2; // 4
+        // globals.config.Inertia.SprintAccelerationLimits.x *= 2.2; // 15
+        // globals.config.Inertia.SprintBrakeInertia.y /= 5; // 0
+        // globals.config.Inertia.SprintTransitionMotionPreservation.x /= 5; // 0.006
+        // globals.config.Inertia.SprintTransitionMotionPreservation.y /= 5; // 0.008
+        // globals.config.Inertia.WalkInertia.x /= 5; // 0.002
+        // globals.config.Inertia.WalkInertia.y /= 5; // 0.025
+
+        // // EXPERIMENTAL
+        // globals.config.Inertia.SideTime.x = 1;
+        // globals.config.Inertia.SideTime.y = 1;
+        // globals.config.Inertia.MinDirectionBlendTime /= 2;
+        // globals.config.Inertia.TiltAcceleration.x = 2;
+        // globals.config.Inertia.TiltAcceleration.y = 2;
+
 
         globalsXP.forEach((expLvl, index) => {
             const reqExp = expLvl.exp;
@@ -114,7 +123,7 @@ class CreatureComforts implements IPostDBLoadMod {
             // Round the EXP value
             expLvl.exp = Math.ceil(expLvl.exp);
             
-            if (this.debug) {
+            if (this.config.debugExp) {
                 this.logger.logWithColor(`[${this.modName}]: Lv${index + 1} - Required EXP: ${reqExp}`, LogTextColor.GRAY);
                 this.logger.logWithColor(`[${this.modName}]: Lv${index + 1} - Updated EXP: ${expLvl.exp}\n`, LogTextColor.WHITE);
             }
@@ -123,7 +132,7 @@ class CreatureComforts implements IPostDBLoadMod {
         // Halve Energy and Hydration Damage
         globalsHealth.Effects.Existence.EnergyDamage /= 2;
         globalsHealth.Effects.Existence.HydrationDamage /= 2;
-        if (this.debug) {
+        if (this.config.debugExistence) {
             this.logger.logWithColor(`[${this.modName}]: ### DEBUG ### energyDamage is now ${globalsHealth.Effects.Existence.EnergyDamage}.`, LogTextColor.YELLOW);
             this.logger.logWithColor(`[${this.modName}]: ### DEBUG ### hydrationDamage is now ${globalsHealth.Effects.Existence.HydrationDamage}.\n`, LogTextColor.YELLOW)
         }
@@ -141,7 +150,7 @@ class CreatureComforts implements IPostDBLoadMod {
         globalsStamina.WalkOverweightLimits.x *= 1.775;
         globalsStamina.WalkOverweightLimits.y *= 1.475;
 
-        if (this.debug) {
+        if (this.config.debugCarryWeight) {
             this.logger.logWithColor(`[${this.modName}]: ### DEBUG ### BaseOverweightLimits are now ${globalsStamina.BaseOverweightLimits.x}kg and ${globalsStamina.BaseOverweightLimits.y}kg.`, LogTextColor.CYAN);
             this.logger.logWithColor(`[${this.modName}]: ### DEBUG ### SprintOverweightLimits are now ${globalsStamina.SprintOverweightLimits.x}kg and ${globalsStamina.SprintOverweightLimits.y}kg.`, LogTextColor.YELLOW);
             this.logger.logWithColor(`[${this.modName}]: ### DEBUG ### WalkSpeedOverweightLimits are now ${globalsStamina.WalkSpeedOverweightLimits.x}kg and ${globalsStamina.WalkSpeedOverweightLimits.y}kg.`, LogTextColor.CYAN);
@@ -201,7 +210,7 @@ class CreatureComforts implements IPostDBLoadMod {
                 currency._props.StackMaxSize *= 2
             }
 
-            if (this.debug) {
+            if (this.config.debugItems) {
                 this.logger.success(`[${this.modName}]: $$$ CURRENCY $$$ ${moneyName} stack size set to ${currency._props.StackMaxSize}.`)
             }
         });
@@ -215,10 +224,21 @@ class CreatureComforts implements IPostDBLoadMod {
                 ammo._props.DurabilityBurnModificator = 1; // Remove durability damage
             }
 
-            if (this.debug) {
+            if (this.config.debugItems) {
                 this.logger.logWithColor(`[${this.modName}]: :::AMMUNITION::: ${ammoName} matches filter.`, LogTextColor.MAGENTA); // DEBUG STATEMENT - Log the matching ammo object(s)
                 this.logger.logWithColor(`[${this.modName}]: :::AMMUNITION::: ${ammoName} now has a StackMaxSize of ${ammo._props.StackMaxSize}.`, LogTextColor.CYAN)
                 this.logger.logWithColor(`[${this.modName}]: :::AMMUNITION::: ${ammoName} now has a DurabilityBurnModificator value of ${ammo._props.DurabilityBurnModificator}.`, LogTextColor.CYAN)
+            }
+        });
+
+        suppressors.sort((a, b) => a._name.localeCompare(b._name));
+        suppressors.forEach((silencer) => {
+            if (silencer?._parent === "550aa4cd4bdc2dd8348b456c" && silencer._props.IsSilencer === true) {
+                silencer._props.DurabilityBurnModificator = 1;
+            }
+
+            if (this.config.debugItems) {
+                this.logger.logWithColor(`[${this.modName}]: :::SILENCERS::: ${silencer._name.toLocaleUpperCase()} now has a DurabilityBurnModificator value of ${silencer._props.DurabilityBurnModificator}.`, LogTextColor.CYAN)
             }
         });
 
@@ -228,7 +248,7 @@ class CreatureComforts implements IPostDBLoadMod {
                 if (!excludedIds.includes(item._id)) { // Check if the item's _id is not in the excluded list
                     item._props.Grids[0]._props.filters = []; // Set the filter to an empty array
 
-                    if (this.debug) {
+                    if (this.config.debugItems) {
                         this.logger.logWithColor(`[${this.modName}]: Item filters removed for secure container: ${item._name}.`, LogTextColor.YELLOW);
                     }
                 }
